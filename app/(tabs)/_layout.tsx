@@ -27,7 +27,7 @@ export default function TabLayout() {
         name="logout"
         options={{
           title: 'Se déconnecter',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="calendar" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="arrow.backward.square" color={color} />,
         }}
       />
     </Tabs>

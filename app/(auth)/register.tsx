@@ -32,7 +32,6 @@ export default function RegisterScreen() {
                 password
             };
             const success = register(user);
-            
             if (!success) {
                 alert("L'utilisateur existe déjà");
             } else {

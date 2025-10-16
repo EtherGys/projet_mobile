@@ -13,7 +13,7 @@ export default function CreateEventScreen() {
     const currentUser = useUserStore((s) => s.user);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState(''); // yyyy-MM-dd
+    const [date, setDate] = useState(''); 
     const [showPicker, setShowPicker] = useState(false);
     const [loading, setLoading] = useState(false);
 

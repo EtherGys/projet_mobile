@@ -13,7 +13,7 @@ export default function CalendarScreen() {
     const events = useEventsStore((s) => s.events);
     const toggleParticipation = useEventsStore((s) => s.toggleParticipation);
     const currentUser = useUserStore((s) => s.user);
-
+    
     const today = React.useMemo(() => {
         const d = new Date();
         const y = d.getFullYear();
@@ -21,7 +21,7 @@ export default function CalendarScreen() {
         const day = String(d.getDate()).padStart(2, '0');
         return `${y}-${m}-${day}`;
     }, []);
-
+    
     const markedDates = useMemo(() => {
         const marks: Record<string, any> = {};
         for (const e of events) {
@@ -33,67 +33,67 @@ export default function CalendarScreen() {
         }
         return marks;
     }, [events]);
-
+    
     const [selectedDate, setSelectedDate] = React.useState<string | null>(today);
-
+    
     const filtered = useMemo(() => {
         if (!selectedDate) return events;
         return events.filter((e) => e.date === selectedDate);
     }, [events, selectedDate]);
-
+    
     const onDayPress = (day: DateData) => {
         setSelectedDate(day.dateString);
     };
-
+    
     return (
         <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
-            <Calendar
-                markedDates={{
-                    ...markedDates,
-                    ...(selectedDate ? { [selectedDate]: { selected: true } } : {}),
-                }}
-                current={selectedDate ?? undefined}
-                onDayPress={onDayPress}
-            />
-            <View style={styles.listHeader}>
-                <ThemedText type="subtitle">Événements {selectedDate ? `du ${formatDateDDMMYYYY(selectedDate)}` : ''}</ThemedText>
-                <Pressable style={styles.addButton} onPress={() => router.push('/create-event')}>
-                    <ThemedText style={{ color: 'white' }}>Créer</ThemedText>
-                </Pressable>
-            </View>
-            <FlatList
-                data={filtered}
-                keyExtractor={(item) => item.id}
-                ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-               renderItem={({ item }) => {
-    const count = item.participantIds?.length ?? 0;
-    const hasJoined = currentUser ? (item.participantIds ?? []).includes(currentUser.id) : false;
-    return (
-                        <Pressable style={styles.card} onPress={() => router.push({ pathname: '/event/[id]', params: { id: item.id } })}>
+        <Calendar
+        markedDates={{
+            ...markedDates,
+            ...(selectedDate ? { [selectedDate]: { selected: true } } : {}),
+        }}
+        current={selectedDate ?? undefined}
+        onDayPress={onDayPress}
+        />
+        <View style={styles.listHeader}>
+        <ThemedText type="subtitle">Événements {selectedDate ? `du ${formatDateDDMMYYYY(selectedDate)}` : ''}</ThemedText>
+        <Pressable style={styles.addButton} onPress={() => router.push('/event/create-event')}>
+        <ThemedText style={{ color: 'white' }}>Créer</ThemedText>
+        </Pressable>
+        </View>
+        <FlatList
+        data={filtered}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+        renderItem={({ item }) => {
+            const count = item.participantIds?.length ?? 0;
+            const hasJoined = currentUser ? (item.participantIds ?? []).includes(currentUser.id) : false;
+            return (
+                <Pressable style={styles.card} onPress={() => router.push({ pathname: '/event/[id]', params: { id: item.id } })}>
                 <ThemedText type="defaultSemiBold">{item.title}</ThemedText>
                 <ThemedText>{item.description}</ThemedText>
-                            <ThemedText style={{ opacity: 0.7 }}>{formatDateDDMMYYYY(item.date)}</ThemedText>
-            <View style={styles.cardFooter}>
-                                <ThemedText>{count} participant{count > 1 ? 's' : ''}</ThemedText>
+                <ThemedText style={{ opacity: 0.7 }}>{formatDateDDMMYYYY(item.date)}</ThemedText>
+                <View style={styles.cardFooter}>
+                <ThemedText>{count} participant{count > 1 ? 's' : ''}</ThemedText>
                 <Pressable
-                                    style={[styles.participateBtn, hasJoined ? styles.btnJoined : styles.btnJoin]}
-                    onPress={() => currentUser && toggleParticipation(item.id, currentUser.id)}
-                    disabled={!currentUser}
+                style={[styles.participateBtn, hasJoined ? styles.btnJoined : styles.btnJoin]}
+                onPress={() => currentUser && toggleParticipation(item.id, currentUser.id)}
+                disabled={!currentUser}
                 >
-                                    <ThemedText style={{ color: 'white' }}>{hasJoined ? 'Participé' : 'Participer'}</ThemedText>
+                <ThemedText style={{ color: 'white' }}>{hasJoined ? 'Participé' : 'Participer'}</ThemedText>
                 </Pressable>
-            </View>
-                        </Pressable>
-    );
-}}
-                ListEmptyComponent={() => (
-                    <ThemedText style={{ textAlign: 'center', marginTop: 16 }}>
-                        Aucun événement
-                    </ThemedText>
-                )}
-                contentContainerStyle={{ paddingVertical: 12 }}
-            />
+                </View>
+                </Pressable>
+            );
+        }}
+        ListEmptyComponent={() => (
+            <ThemedText style={{ textAlign: 'center', marginTop: 16 }}>
+            Aucun événement
+            </ThemedText>
+        )}
+        contentContainerStyle={{ paddingVertical: 12 }}
+        />
         </ThemedView>
         </SafeAreaView>
     );

@@ -13,7 +13,7 @@ export default function LoginScreen() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState(false);
-
+    
     const onLogin = async () => {
         if (!email || !password) {
             Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
@@ -26,55 +26,54 @@ export default function LoginScreen() {
                 email,
                 password
             };
-           const logged =  login(user.email, user.password as string);
+            const logged =  login(user.email, user.password as string);
             if (!logged) {
-  alert("Email ou mot de passe incorrect");
-} else {
-
-    router.replace('/(tabs)/calendar');
-}
+                alert("Email ou mot de passe incorrect");
+            } else {
+                router.replace('/(tabs)/calendar');
+            }
         } catch (e) {
             Alert.alert('Erreur', 'Impossible de se connecter.');
         } finally {
             setLoading(false);
         }
     };
-
+    
     useEffect(() => {
         if (isConnected) {
             router.replace('/(tabs)/calendar');
         }
     }, [isConnected]);
-
+    
     return (
         <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
-            <ThemedText type="title">Connexion</ThemedText>
-            <View style={styles.form}>
-                <TextInput
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                    value={email}
-                    onChangeText={setEmail}
-                    style={styles.input}
-                />
-                <TextInput
-                    placeholder="Mot de passe"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                    style={styles.input}
-                />
-                <Pressable onPress={onLogin} style={styles.button} disabled={loading}>
-                    <ThemedText style={styles.buttonText}>{loading ? '...' : 'Se connecter'}</ThemedText>
-                </Pressable>
-            </View>
-            <Link href="/(auth)/register">
-                <Link.Trigger>
-                    <ThemedText type="link">Créer un compte</ThemedText>
-                </Link.Trigger>
-            </Link>
+        <ThemedText type="title">Connexion</ThemedText>
+        <View style={styles.form}>
+        <TextInput
+        placeholder="Email"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
+        style={styles.input}
+        />
+        <TextInput
+        placeholder="Mot de passe"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+        style={styles.input}
+        />
+        <Pressable onPress={onLogin} style={styles.button} disabled={loading}>
+        <ThemedText style={styles.buttonText}>{loading ? '...' : 'Se connecter'}</ThemedText>
+        </Pressable>
+        </View>
+        <Link href="/(auth)/register">
+        <Link.Trigger>
+        <ThemedText type="link">Créer un compte</ThemedText>
+        </Link.Trigger>
+        </Link>
         </ThemedView>
         </SafeAreaView>
     );

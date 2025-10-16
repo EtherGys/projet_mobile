@@ -55,7 +55,6 @@ export default function EventDetailScreen() {
 
     const onDelete = () => {
         if (Platform.OS === 'web') {
-            // On web, React Native's Alert buttons are not supported; use confirm
             // eslint-disable-next-line no-restricted-globals
             const ok = confirm('Voulez-vous supprimer cet événement ?');
             if (ok) {

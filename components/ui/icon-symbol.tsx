@@ -19,6 +19,7 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'calendar': 'event',
+  'arrow.backward.square': 'logout',
 } as IconMapping;
 
 /**
