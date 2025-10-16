@@ -6,7 +6,7 @@ export default function Index() {
     const isConnected = useStore((s) => s.isConnected);
 
     if (isConnected) {
-        return <Redirect href="/(tabs)" />;
+        return <Redirect href="/(tabs)/calendar" />;
     }
 
     return <Redirect href="/(auth)/login" />;
