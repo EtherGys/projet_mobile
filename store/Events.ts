@@ -11,7 +11,7 @@ type EventsActions = {
 	addEvent: (event: Omit<EventItem, 'id'>) => void;
 	updateEvent: (id: string, partial: Partial<EventItem>) => void;
 	removeEvent: (id: string) => void;
-	setParticipated: (id: string, participated: boolean) => void;
+	toggleParticipation: (id: string, userId: string) => void;
 };
 
 const useEventsStore = create<EventsState & EventsActions>()(
@@ -20,10 +20,7 @@ const useEventsStore = create<EventsState & EventsActions>()(
 			events: [],
 			addEvent: (event) =>
 				set((state) => ({
-					events: [
-						...state.events,
-						{ ...event, id: Math.random().toString(36).slice(2) },
-					],
+					events: [...state.events, { ...event, id: Math.random().toString(36).slice(2), participantIds: [] }],
 				})),
 			updateEvent: (id, partial) =>
 				set((state) => ({
@@ -31,9 +28,18 @@ const useEventsStore = create<EventsState & EventsActions>()(
 				})),
 			removeEvent: (id) =>
 				set((state) => ({ events: state.events.filter((e) => e.id !== id) })),
-			setParticipated: (id, participated) =>
+			toggleParticipation: (id, userId) =>
 				set((state) => ({
-					events: state.events.map((e) => (e.id === id ? { ...e, participated } : e)),
+					events: state.events.map((e) => {
+						if (e.id !== id) return e;
+						const setIds = new Set(e.participantIds ?? []);
+						if (setIds.has(userId)) {
+							setIds.delete(userId);
+						} else {
+							setIds.add(userId);
+						}
+						return { ...e, participantIds: Array.from(setIds) };
+					}),
 				})),
 		}),
 		{
