@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import React, { useMemo } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CalendarScreen() {
     const events = useEventsStore((s) => s.events);
@@ -35,6 +36,7 @@ export default function CalendarScreen() {
     };
 
     return (
+        <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
             <Calendar
                 markedDates={{
@@ -82,6 +84,7 @@ export default function CalendarScreen() {
                 contentContainerStyle={{ paddingVertical: 12 }}
             />
         </ThemedView>
+        </SafeAreaView>
     );
 }
 

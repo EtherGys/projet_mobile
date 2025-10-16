@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function EventDetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -24,9 +25,11 @@ export default function EventDetailScreen() {
 
     if (!event) {
         return (
+            <SafeAreaView style={{ flex: 1 }}>
             <ThemedView style={styles.container}>
                 <ThemedText>Événement introuvable.</ThemedText>
             </ThemedView>
+            </SafeAreaView>
         );
     }
 
@@ -73,6 +76,7 @@ export default function EventDetailScreen() {
     };
 
     return (
+        <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
             <ThemedText type="title">Modifier l'événement</ThemedText>
             <View style={styles.form}>
@@ -115,6 +119,7 @@ export default function EventDetailScreen() {
                 </View>
             </View>
         </ThemedView>
+        </SafeAreaView>
     );
 }
 

@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CreateEventScreen() {
     const addEvent = useEventsStore((s) => s.addEvent);
@@ -37,6 +38,7 @@ export default function CreateEventScreen() {
     };
 
     return (
+        <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
             <ThemedText type="title">Créer un événement</ThemedText>
             <View style={styles.form}>
@@ -72,6 +74,7 @@ export default function CreateEventScreen() {
                 </Pressable>
             </View>
         </ThemedView>
+        </SafeAreaView>
     );
 }
 

@@ -5,6 +5,7 @@ import type { User } from '@/types/User';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RegisterScreen() {
     const login = useStore((s) => s.login);
@@ -45,6 +46,7 @@ export default function RegisterScreen() {
     }, [isConnected]);
 
     return (
+        <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
             <ThemedText type="title">Inscription</ThemedText>
             <View style={styles.form}>
@@ -80,6 +82,7 @@ export default function RegisterScreen() {
                 </Link.Trigger>
             </Link>
         </ThemedView>
+        </SafeAreaView>
     );
 }
 
