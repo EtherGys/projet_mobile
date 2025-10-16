@@ -1,15 +1,18 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import useEventsStore from '@/store/Events';
+import useUserStore from '@/store/User';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 export default function EventDetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const events = useEventsStore((s) => s.events);
     const updateEvent = useEventsStore((s) => s.updateEvent);
     const removeEvent = useEventsStore((s) => s.removeEvent);
+    const currentUser = useUserStore((s) => s.user);
 
     const event = useMemo(() => events.find((e) => e.id === id), [events, id]);
 
@@ -17,6 +20,7 @@ export default function EventDetailScreen() {
     const [description, setDescription] = useState(event?.description ?? '');
     const [date, setDate] = useState(event?.date ?? '');
     const [loading, setLoading] = useState(false);
+    const [showPicker, setShowPicker] = useState(false);
 
     if (!event) {
         return (
@@ -47,6 +51,16 @@ export default function EventDetailScreen() {
     };
 
     const onDelete = () => {
+        if (Platform.OS === 'web') {
+            // On web, React Native's Alert buttons are not supported; use confirm
+            // eslint-disable-next-line no-restricted-globals
+            const ok = confirm('Voulez-vous supprimer cet événement ?');
+            if (ok) {
+                removeEvent(event.id);
+                router.back();
+            }
+            return;
+        }
         Alert.alert('Supprimer', 'Voulez-vous supprimer cet événement ?', [
             { text: 'Annuler', style: 'cancel' },
             {
@@ -64,14 +78,40 @@ export default function EventDetailScreen() {
             <View style={styles.form}>
                 <TextInput placeholder="Titre" value={title} onChangeText={setTitle} style={styles.input} />
                 <TextInput placeholder="Description" value={description} onChangeText={setDescription} style={styles.input} />
-                <TextInput placeholder="Date (yyyy-MM-dd)" value={date} onChangeText={setDate} style={styles.input} />
+                {Platform.OS === 'web' ? (
+                    <TextInput placeholder="Date (yyyy-MM-dd)" value={date} onChangeText={setDate} style={styles.input} />
+                ) : (
+                    <>
+                        <Pressable onPress={() => setShowPicker(true)} style={[styles.input, { justifyContent: 'center' }]}>
+                            <ThemedText>{date || 'Choisir une date'}</ThemedText>
+                        </Pressable>
+                        {showPicker && (
+                            <DateTimePicker
+                                value={date ? new Date(date) : new Date()}
+                                mode="date"
+                                display="default"
+                                onChange={(event, selectedDate) => {
+                                    setShowPicker(Platform.OS === 'ios');
+                                    if (selectedDate) {
+                                        const y = selectedDate.getFullYear();
+                                        const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                                        const d = String(selectedDate.getDate()).padStart(2, '0');
+                                        setDate(`${y}-${m}-${d}`);
+                                    }
+                                }}
+                            />
+                        )}
+                    </>
+                )}
                 <View style={{ flexDirection: 'row', gap: 12 }}>
                     <Pressable onPress={onSave} style={[styles.button, { backgroundColor: '#1e90ff' }]} disabled={loading}>
                         <ThemedText style={styles.buttonText}>{loading ? '...' : 'Enregistrer'}</ThemedText>
                     </Pressable>
-                    <Pressable onPress={onDelete} style={[styles.button, { backgroundColor: '#ef4444' }]}>
-                        <ThemedText style={styles.buttonText}>Supprimer</ThemedText>
-                    </Pressable>
+                    {currentUser?.id === event.createdByUserId ? (
+                        <Pressable onPress={onDelete} style={[styles.button, { backgroundColor: '#ef4444' }]}>
+                            <ThemedText style={styles.buttonText}>Supprimer</ThemedText>
+                        </Pressable>
+                    ) : null}
                 </View>
             </View>
         </ThemedView>
