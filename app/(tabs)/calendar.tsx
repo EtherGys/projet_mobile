@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import useEventsStore from '@/store/Events';
 import useUserStore from '@/store/User';
+import { formatDateDDMMYYYY } from '@/utils/date';
 import { router } from 'expo-router';
 import React, { useMemo } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
@@ -13,18 +14,27 @@ export default function CalendarScreen() {
     const toggleParticipation = useEventsStore((s) => s.toggleParticipation);
     const currentUser = useUserStore((s) => s.user);
 
+    const today = React.useMemo(() => {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }, []);
+
     const markedDates = useMemo(() => {
         const marks: Record<string, any> = {};
         for (const e of events) {
+            const count = e.participantIds?.length ?? 0;
             marks[e.date] = {
                 marked: true,
-                dotColor: e.participated ? '#22c55e' : '#3b82f6',
+                dotColor: count > 0 ? '#22c55e' : '#3b82f6',
             };
         }
         return marks;
     }, [events]);
 
-    const [selectedDate, setSelectedDate] = React.useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = React.useState<string | null>(today);
 
     const filtered = useMemo(() => {
         if (!selectedDate) return events;
@@ -43,10 +53,11 @@ export default function CalendarScreen() {
                     ...markedDates,
                     ...(selectedDate ? { [selectedDate]: { selected: true } } : {}),
                 }}
+                current={selectedDate ?? undefined}
                 onDayPress={onDayPress}
             />
             <View style={styles.listHeader}>
-                <ThemedText type="subtitle">Événements {selectedDate ? `du ${selectedDate}` : ''}</ThemedText>
+                <ThemedText type="subtitle">Événements {selectedDate ? `du ${formatDateDDMMYYYY(selectedDate)}` : ''}</ThemedText>
                 <Pressable style={styles.addButton} onPress={() => router.push('/create-event')}>
                     <ThemedText style={{ color: 'white' }}>Créer</ThemedText>
                 </Pressable>
@@ -59,10 +70,10 @@ export default function CalendarScreen() {
                     const count = item.participantIds?.length ?? 0;
                     const hasJoined = currentUser ? (item.participantIds ?? []).includes(currentUser.id) : false;
                     return (
-                        <Pressable style={styles.card} onPress={() => router.push(`/event/${item.id}`)}>
+                        <Pressable style={styles.card} onPress={() => router.push({ pathname: '/event/[id]', params: { id: item.id } })}>
                             <ThemedText type="defaultSemiBold">{item.title}</ThemedText>
                             <ThemedText>{item.description}</ThemedText>
-                            <ThemedText style={{ opacity: 0.7 }}>{item.date}</ThemedText>
+                            <ThemedText style={{ opacity: 0.7 }}>{formatDateDDMMYYYY(item.date)}</ThemedText>
                             <View style={styles.cardFooter}>
                                 <ThemedText>{count} participant{count > 1 ? 's' : ''}</ThemedText>
                                 <Pressable

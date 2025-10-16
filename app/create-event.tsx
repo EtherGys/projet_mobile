@@ -45,11 +45,18 @@ export default function CreateEventScreen() {
                 <TextInput placeholder="Titre" value={title} onChangeText={setTitle} style={styles.input} />
                 <TextInput placeholder="Description" value={description} onChangeText={setDescription} style={styles.input} />
                 {Platform.OS === 'web' ? (
-                    <TextInput placeholder="Date (yyyy-MM-dd)" value={date} onChangeText={setDate} style={styles.input} />
+                    <View style={styles.input}>
+                        {React.createElement('input', {
+                            type: 'date',
+                            value: date,
+                            onChange: (e: any) => setDate(e.target.value),
+                            style: { width: '100%', border: 'none', outline: 'none', background: 'transparent' },
+                        })}
+                    </View>
                 ) : (
                     <>
                         <Pressable onPress={() => setShowPicker(true)} style={[styles.input, { justifyContent: 'center' }]}>
-                            <ThemedText>{date || 'Choisir une date'}</ThemedText>
+                            <ThemedText>{date ? `${date.split('-')[2]}/${date.split('-')[1]}/${date.split('-')[0]}` : 'Choisir une date'}</ThemedText>
                         </Pressable>
                         {showPicker && (
                             <DateTimePicker
