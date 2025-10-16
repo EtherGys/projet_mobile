@@ -10,8 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function LoginScreen() {
     const login = useStore((s) => s.login);
     const isConnected = useStore((s) => s.isConnected);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState(false);
 
     const onLogin = async () => {
@@ -24,9 +24,15 @@ export default function LoginScreen() {
             const user: User = {
                 id: Math.random().toString(36).slice(2),
                 email,
+                password
             };
-            login(user);
-            router.replace('/(tabs)');
+           const logged =  login(user.email, user.password as string);
+            if (!logged) {
+  alert("Email ou mot de passe incorrect");
+} else {
+
+    router.replace('/(tabs)/calendar');
+}
         } catch (e) {
             Alert.alert('Erreur', 'Impossible de se connecter.');
         } finally {
@@ -36,7 +42,7 @@ export default function LoginScreen() {
 
     useEffect(() => {
         if (isConnected) {
-            router.replace('/(tabs)');
+            router.replace('/(tabs)/calendar');
         }
     }, [isConnected]);
 

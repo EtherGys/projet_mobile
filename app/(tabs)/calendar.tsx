@@ -66,27 +66,27 @@ export default function CalendarScreen() {
                 data={filtered}
                 keyExtractor={(item) => item.id}
                 ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-                renderItem={({ item }) => {
-                    const count = item.participantIds?.length ?? 0;
-                    const hasJoined = currentUser ? (item.participantIds ?? []).includes(currentUser.id) : false;
-                    return (
+               renderItem={({ item }) => {
+    const count = item.participantIds?.length ?? 0;
+    const hasJoined = currentUser ? (item.participantIds ?? []).includes(currentUser.id) : false;
+    return (
                         <Pressable style={styles.card} onPress={() => router.push({ pathname: '/event/[id]', params: { id: item.id } })}>
-                            <ThemedText type="defaultSemiBold">{item.title}</ThemedText>
-                            <ThemedText>{item.description}</ThemedText>
+                <ThemedText type="defaultSemiBold">{item.title}</ThemedText>
+                <ThemedText>{item.description}</ThemedText>
                             <ThemedText style={{ opacity: 0.7 }}>{formatDateDDMMYYYY(item.date)}</ThemedText>
-                            <View style={styles.cardFooter}>
+            <View style={styles.cardFooter}>
                                 <ThemedText>{count} participant{count > 1 ? 's' : ''}</ThemedText>
-                                <Pressable
+                <Pressable
                                     style={[styles.participateBtn, hasJoined ? styles.btnJoined : styles.btnJoin]}
-                                    onPress={() => currentUser && toggleParticipation(item.id, currentUser.id)}
-                                    disabled={!currentUser}
-                                >
+                    onPress={() => currentUser && toggleParticipation(item.id, currentUser.id)}
+                    disabled={!currentUser}
+                >
                                     <ThemedText style={{ color: 'white' }}>{hasJoined ? 'Participé' : 'Participer'}</ThemedText>
-                                </Pressable>
-                            </View>
+                </Pressable>
+            </View>
                         </Pressable>
-                    );
-                }}
+    );
+}}
                 ListEmptyComponent={() => (
                     <ThemedText style={{ textAlign: 'center', marginTop: 16 }}>
                         Aucun événement
