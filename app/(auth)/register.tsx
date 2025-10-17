@@ -2,7 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import useStore from '@/store/User';
 import type { User } from '@/types/User';
-import { Link, router } from 'expo-router';
+import { Link, router, Stack } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -51,6 +51,12 @@ export default function RegisterScreen() {
     }, [isConnected]);
     
     return (
+          <>
+           <Stack.Screen
+                options={{
+                    title: `Inscription`, 
+                }}
+            />
         <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
         <ThemedText type="title">Inscription</ThemedText>
@@ -88,6 +94,7 @@ export default function RegisterScreen() {
         </Link>
         </ThemedView>
         </SafeAreaView>
+        </>
     );
 }
 
