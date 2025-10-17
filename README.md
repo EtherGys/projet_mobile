@@ -1,50 +1,44 @@
-# Welcome to your Expo app 👋
+# 📱 EventEase – Application mobile React Native - Projet Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**EventEase** est une application mobile prototype (sans besoin d'un backend). Elle permet aux membres d’une association fictive de consulter, créer et gérer des événements communautaires.
 
-## Get started
+La navigation entre les écrans est gérée avec React Navigation (stack + tabs). Les données des événements sont stockées localement via AsyncStorage, permettant une persistance sans backend. La structure du code suit une organisation en composants modulaires (screens/, components/).
+Le CRUD complet sur les événements est fonctionnel (création, modification, suppression), avec une option pour marquer un événement comme "participé".
+Une gestion simple d’authentification (mockée) permet à l’utilisateur de se connecter ou s’inscrire sans appel serveur. Les informations de connexion de l'utilisateur sont stockés dans un store Zustand afin de simuler une gestion avec par exemple un token.
+Le bonus intégré : l’affichage calendrier via react-native-calendars où l'utilisateur peut naviger pour voir les différents événements.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Fonctionnalités principales
 
-2. Start the app
+✅ Connexion / inscription (mockée, sans backend)  
+✅ Liste des événements (titre, description, date)  
+✅ Ajout, modification, suppression d’événements  
+✅ Marquer un événement comme "participé"  
+✅ Persistance locale avec **AsyncStorage**
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🎁 Fonctionnalités bonus (implémentées)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- 📅 Affichage des événements dans un **calendrier** (`react-native-calendars`)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 🛠️ Architecture & choix techniques
 
-When you're ready, run:
+- **Framework** : [React Native](https://reactnative.dev/) avec [Expo](https://expo.dev/)
+- **Navigation** : `@react-navigation/native` (Stack + Tabs)
+- **Persistance locale** : `@react-native-async-storage/async-storage`
+- **Organisation du code** : Composants réutilisables, écrans séparés
 
-```bash
-npm run reset-project
-```
+---
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 📦 Installation & lancement
 
-## Learn more
+1. Cloner le repo
+2. Installer les dépendances : 
+npm install
+3. Lancer l’application avec Expo : 
+npx expo start
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
