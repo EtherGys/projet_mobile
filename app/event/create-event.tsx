@@ -3,7 +3,7 @@ import { ThemedView } from '@/components/themed-view';
 import useEventsStore from '@/store/Events';
 import useUserStore from '@/store/User';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -38,6 +38,12 @@ export default function CreateEventScreen() {
     };
 
     return (
+             <>
+           <Stack.Screen
+                options={{
+                    title: `Créer un événement`, 
+                }}
+            />
         <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
             <ThemedText type="title">Créer un événement</ThemedText>
@@ -82,6 +88,7 @@ export default function CreateEventScreen() {
             </View>
         </ThemedView>
         </SafeAreaView>
+        </>
     );
 }
 

@@ -3,7 +3,7 @@ import { ThemedView } from '@/components/themed-view';
 import useEventsStore from '@/store/Events';
 import useUserStore from '@/store/User';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -75,6 +75,12 @@ export default function EventDetailScreen() {
     };
 
     return (
+        <>
+           <Stack.Screen
+                options={{
+                    title: `Événement`, 
+                }}
+            />
         <SafeAreaView style={{ flex: 1 }}>
         <ThemedView style={styles.container}>
             <ThemedText type="title">Modifier l'événement</ThemedText>
@@ -117,15 +123,14 @@ export default function EventDetailScreen() {
                     <Pressable onPress={onSave} style={[styles.button, { backgroundColor: '#1e90ff' }]} disabled={loading}>
                         <ThemedText style={styles.buttonText}>{loading ? '...' : 'Enregistrer'}</ThemedText>
                     </Pressable>
-                    {currentUser?.id === event.createdByUserId ? (
                         <Pressable onPress={onDelete} style={[styles.button, { backgroundColor: '#ef4444' }]}>
                             <ThemedText style={styles.buttonText}>Supprimer</ThemedText>
                         </Pressable>
-                    ) : null}
                 </View>
             </View>
         </ThemedView>
         </SafeAreaView>
+        </>
     );
 }
 
