@@ -24,16 +24,16 @@ const useStore = create<AuthState & AuthActions>()(
       user: null,
       users: [],
       isHydrated: false,
-
+      
       register: (newUser: User) => {
         const { users } = get();
         const exists = users.some((u) => u.email === newUser.email);
         if (exists) return false;
-
+        
         set({ users: [...users, newUser] });
         return true;
       },
-
+      
       login: (email: string, password: string) => {
         const { users } = get();
         const found = users.find(
@@ -45,9 +45,9 @@ const useStore = create<AuthState & AuthActions>()(
         }
         return false;
       },
-
+      
       logout: () => set({ user: null, isConnected: false }),
-
+      
       setHydrated: (value: boolean) => set({ isHydrated: value }),
     }),
     {
